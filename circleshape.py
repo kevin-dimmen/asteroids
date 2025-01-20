@@ -1,5 +1,7 @@
 """Handles circles in the game."""
 
+from __future__ import annotations
+
 import pygame
 
 
@@ -23,3 +25,9 @@ class CircleShape(pygame.sprite.Sprite):
     def update(self, dt):
         # sub-classes must override
         pass
+
+    def check_collision(self, other: CircleShape) -> bool:
+        """Check if this is colliding with another circle."""
+        collision_distance = self.radius + other.radius
+        actual_distance = self.position.distance_to(other.position)
+        return actual_distance <= collision_distance

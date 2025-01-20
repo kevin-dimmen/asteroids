@@ -7,6 +7,7 @@ import pygame
 
 from typing import Tuple
 
+
 class Player(CircleShape):
     """Player character."""
 
@@ -16,7 +17,7 @@ class Player(CircleShape):
         self.color = COLOR_WHITE
         self.width = 2
 
-    def triangle(self) -> Tuple[int,int, int]:
+    def triangle(self) -> Tuple[int, int, int]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
         a = self.position + forward * self.radius

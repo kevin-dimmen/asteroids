@@ -3,6 +3,9 @@ from constants import COLOR_WHITE
 from constants import PLAYER_RADIUS
 from constants import PLAYER_TURN_SPEED
 from constants import PLAYER_SPEED
+from constants import PLAYER_SHOOT_COOLDOWN
+
+from shot import Shot
 import pygame
 
 from typing import Tuple
@@ -16,6 +19,7 @@ class Player(CircleShape):
         self.rotation = 0
         self.color = COLOR_WHITE
         self.width = 2
+        self.shot_cooldown = 0
 
     def triangle(self) -> Tuple[int, int, int]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -32,6 +36,7 @@ class Player(CircleShape):
         self.rotation += PLAYER_TURN_SPEED * dt
 
     def update(self, dt) -> None:
+        self.shot_cooldown -= dt
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -42,7 +47,15 @@ class Player(CircleShape):
             self.move(dt)
         if keys[pygame.K_s]:
             self.move(-dt)
+        if keys[pygame.K_SPACE]:
+            self.shoot(dt)
 
     def move(self, dt) -> None:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
+
+    def shoot(self, dt) -> None:
+        if self.shot_cooldown > 0:
+            return
+        Shot(self.position.x, self.position.y, self.rotation)
+        self.shot_cooldown = PLAYER_SHOOT_COOLDOWN
